@@ -1,21 +1,15 @@
 services:
 
   # ==========================================
-  # API 1 - LUMEN (ESCALE 2 INSTÂNCIAS)
+  # API 1 - LUMEN (Replicada)
   # ==========================================
   lumen_api:
     build: ./api_php
     working_dir: /var/www/html/lumen
-
-    # AQUI DEFINIMOS 2 INSTÂNCIAS DA MESMA API
     deploy:
       replicas: 2
-
-    # STORAGE PRECISA SER COMPARTILHADO ENTRE AS INSTÂNCIAS
     volumes:
       - ./api_php/lumen/storage:/var/www/html/lumen/storage
-
-    # VARIÁVEIS DE BANCO
     environment:
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
@@ -23,36 +17,23 @@ services:
       - DB_DATABASE=lumen
       - DB_USERNAME=postgres
       - DB_PASSWORD=senha
-
     command: sh -c "chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache && php artisan migrate --force && php-fpm"
-
     depends_on:
       - postgres
-
-    # PORTA INTERNA DO PHP-FPM
     expose:
       - "9000"
 
   # ==========================================
-  # API 2 (comentada)
+  # API 3 - Python FastAPI
   # ==========================================
-  # api2:
-  #   build: ./api2
-  #   container_name: api2
-  #   ports:
-  #     - "3000:3000"
+  api3:
+    build: ./api_Python
+    container_name: api3
+    expose:
+      - "8000"
 
   # ==========================================
-  # API 3 (comentada)
-  # ==========================================
-  # api3:
-  #   build: ./api3
-  #   container_name: api3
-  #   ports:
-  #     - "5000:5000"
-
-  # ==========================================
-  # GATEWAY (NGINX)
+  # Gateway - Nginx
   # ==========================================
   gateway:
     build: ./gateway
@@ -61,11 +42,10 @@ services:
       - "8080:80"
     depends_on:
       - lumen_api
-      # - api2
-      # - api3
+      - api3
 
   # ==========================================
-  # POSTGRES
+  # Postgres
   # ==========================================
   postgres:
     image: postgres:15

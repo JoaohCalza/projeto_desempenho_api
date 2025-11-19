@@ -1,17 +1,17 @@
-# Arquivos de Sistema e IDEs (Opcional, mas recomendado)
+# ============================================
+# SISTEMA / IDE
+# ============================================
 .DS_Store
+Thumbs.db
 .idea/
 .vscode/
-Thumbs.db
 
-# Dependências (Vendor)
+# ============================================
+# PHP / LUMEN / LARAVEL
+# ============================================
 vendor/
-node_modules/
 
-# Configurações e Variáveis de Ambiente
-.env
-
-# Diretórios de Cache, Logs e Storage do Lumen/Laravel
+# Cache e logs do Laravel/Lumen
 bootstrap/cache/*.php
 storage/*.log
 storage/logs/
@@ -19,7 +19,55 @@ storage/framework/cache/
 storage/framework/sessions/
 storage/framework/views/
 
-# Dados de Containers (Volumes)
-# Assume que seus dados de DB estão em "volumes/" ou "db_data/"
+# ============================================
+# NODE
+# ============================================
+node_modules/
+
+# ============================================
+# PYTHON
+# ============================================
+
+# Virtual environments
+venv/
+.env/
+*.env
+
+# Compilados Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Arquivos temporários
+*.log
+*.sqlite3
+*.db
+
+# Build e distribuições
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Cache de ferramentas
+.pytest_cache/
+.cache/
+.mypy_cache/
+.python-version
+
+# Jupyter / Colab
+.ipynb_checkpoints/
+
+# ============================================
+# DOCKER
+# ============================================
 volumes/
 db_data/
+docker-data/
+*.pid
+
+# ============================================
+# SISTEMAS OPERACIONAIS
+# ============================================
+ehthumbs.db
