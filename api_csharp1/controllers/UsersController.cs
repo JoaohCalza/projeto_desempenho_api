@@ -46,16 +46,18 @@ public class UsersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(int id, User updatedUser)
     {
-        if (id != updatedUser.Id) return BadRequest();
+        var user = await _context.Users.FindAsync(id);
+        if (user == null) return NotFound();
 
-        var exists = await _context.Users.AnyAsync(u => u.Id == id);
+        // Atualiza só os campos que podem mudar
+        user.Name = updatedUser.Name;
+        user.Email = updatedUser.Email;
+        user.UserName = updatedUser.UserName;
+        user.Password = updatedUser.Password;
 
-        if (!exists) return NotFound();
-
-        _context.Entry(updatedUser).State = EntityState.Modified;
         await _context.SaveChangesAsync();
 
-        return NoContent();
+        return Ok(user);
     }
 
     // DELETE api/users/{id}

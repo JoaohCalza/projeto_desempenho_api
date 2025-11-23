@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 # Define diretório de trabalho
 WORKDIR /app
 
-# Primeiro copia somente o requirements (boa prática)
+# Copia requirements primeiro (boa prática)
 COPY requirements.txt .
 
 # Instala dependências
@@ -28,5 +28,5 @@ COPY . .
 # Expor porta
 EXPOSE 8000
 
-# Comando para rodar API Python
-CMD ["uvicorn", "main.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD correto, apontando para main.py dentro da pasta main
+CMD ["uvicorn", "main.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

@@ -1,15 +1,15 @@
 services:
 
   # ==========================================
-  # Postgres
+  # PostgreSQL (Único para todas APIs)
   # ==========================================
   postgres:
     image: postgres:15
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: lumen
+      POSTGRES_PASSWORD: senha
+      POSTGRES_DB: masterdb
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -19,23 +19,42 @@ services:
       retries: 10
 
   # ==========================================
-  # API 1 - Lumen (replicada)
+  # API 1 – Lumen (2 instâncias)
   # ==========================================
-  lumen_api:
+  lumen_api_1:
     build: ./api_php
+    container_name: lumen_api_1
     working_dir: /var/www/html/lumen
-    scale: 2
-
     volumes:
       - ./api_php/lumen/storage:/var/www/html/lumen/storage
     environment:
       - DB_CONNECTION=pgsql
       - DB_HOST=postgres
       - DB_PORT=5432
-      - DB_DATABASE=lumen
+      - DB_DATABASE=masterdb
       - DB_USERNAME=postgres
       - DB_PASSWORD=senha
-    command: sh -c "chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache && php artisan migrate --force && php-fpm"
+    command: sh -c "php artisan migrate --force && php-fpm"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "9000"
+
+  lumen_api_2:
+    build: ./api_php
+    container_name: lumen_api_2
+    working_dir: /var/www/html/lumen
+    volumes:
+      - ./api_php/lumen/storage:/var/www/html/lumen/storage
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=masterdb
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=senha
+    command: php-fpm
     depends_on:
       postgres:
         condition: service_healthy
@@ -43,11 +62,34 @@ services:
       - "9000"
 
   # ==========================================
-  # API 3 - Python FastAPI
+  # API 2 – Python FastAPI (2 instâncias)
   # ==========================================
-  api3:
+  api_python_1:
     build: ./api_Python
-    container_name: api3
+    container_name: api_python_1
+    command: uvicorn main.main:app --host 0.0.0.0 --port 8000
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=masterdb
+      - DB_USER=postgres
+      - DB_PASSWORD=senha
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "8000"
+
+  api_python_2:
+    build: ./api_Python
+    container_name: api_python_2
+    command: uvicorn main.main:app --host 0.0.0.0 --port 8000
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=masterdb
+      - DB_USER=postgres
+      - DB_PASSWORD=senha
     depends_on:
       postgres:
         condition: service_healthy
@@ -55,14 +97,14 @@ services:
       - "8000"
 
   # ==========================================
-  # API 4 - C# ASP.NET (REPLICADA)
+  # API 3 – C# ASP.NET (2 instâncias)
   # ==========================================
-  api_csharp1:
+  api_csharp_1:
     build: ./api_csharp1
-    container_name: api_csharp1
+    container_name: api_csharp_1
     environment:
       - ASPNETCORE_URLS=http://+:5243
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=users_db;Username=postgres;Password=senha
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=masterdb;Username=postgres;Password=senha
       - RUN_MIGRATIONS=true
     depends_on:
       postgres:
@@ -70,12 +112,12 @@ services:
     expose:
       - "5243"
 
-  api_csharp2:
+  api_csharp_2:
     build: ./api_csharp1
-    container_name: api_csharp2
+    container_name: api_csharp_2
     environment:
       - ASPNETCORE_URLS=http://+:5243
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=users_db;Username=postgres;Password=senha
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=masterdb;Username=postgres;Password=senha
       - RUN_MIGRATIONS=false
     depends_on:
       postgres:
@@ -92,13 +134,17 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      lumen_api:
+      lumen_api_1:
         condition: service_started
-      api3:
+      lumen_api_2:
         condition: service_started
-      api_csharp1:
+      api_python_1:
         condition: service_started
-      api_csharp2:
+      api_python_2:
+        condition: service_started
+      api_csharp_1:
+        condition: service_started
+      api_csharp_2:
         condition: service_started
 
 volumes:
