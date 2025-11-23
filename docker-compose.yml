@@ -1,13 +1,31 @@
 services:
 
   # ==========================================
-  # API 1 - LUMEN (Replicada)
+  # Postgres
+  # ==========================================
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: lumen
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+  # ==========================================
+  # API 1 - Lumen (replicada)
   # ==========================================
   lumen_api:
     build: ./api_php
     working_dir: /var/www/html/lumen
-    deploy:
-      replicas: 2
+    scale: 2
+
     volumes:
       - ./api_php/lumen/storage:/var/www/html/lumen/storage
     environment:
@@ -19,7 +37,8 @@ services:
       - DB_PASSWORD=senha
     command: sh -c "chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache && php artisan migrate --force && php-fpm"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     expose:
       - "9000"
 
@@ -29,11 +48,43 @@ services:
   api3:
     build: ./api_Python
     container_name: api3
+    depends_on:
+      postgres:
+        condition: service_healthy
     expose:
       - "8000"
 
   # ==========================================
-  # Gateway - Nginx
+  # API 4 - C# ASP.NET (REPLICADA)
+  # ==========================================
+  api_csharp1:
+    build: ./api_csharp1
+    container_name: api_csharp1
+    environment:
+      - ASPNETCORE_URLS=http://+:5243
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=users_db;Username=postgres;Password=senha
+      - RUN_MIGRATIONS=true
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "5243"
+
+  api_csharp2:
+    build: ./api_csharp1
+    container_name: api_csharp2
+    environment:
+      - ASPNETCORE_URLS=http://+:5243
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=users_db;Username=postgres;Password=senha
+      - RUN_MIGRATIONS=false
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "5243"
+
+  # ==========================================
+  # Gateway Nginx
   # ==========================================
   gateway:
     build: ./gateway
@@ -41,23 +92,14 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - lumen_api
-      - api3
-
-  # ==========================================
-  # Postgres
-  # ==========================================
-  postgres:
-    image: postgres:15
-    container_name: postgres
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: senha
-      POSTGRES_DB: lumen
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      lumen_api:
+        condition: service_started
+      api3:
+        condition: service_started
+      api_csharp1:
+        condition: service_started
+      api_csharp2:
+        condition: service_started
 
 volumes:
   postgres_data:
