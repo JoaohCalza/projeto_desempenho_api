@@ -53,7 +53,7 @@ curl -X POST http://localhost:8080/users \
 curl http://localhost:8080/users
 
 ✏️ Atualizar Usuário (PUT)
-curl -X PUT http://localhost:8080/users/11\
+curl -X PUT http://localhost:8080/users/1 \
 -H "Content-Type: application/json" \
 -d '{
   "name": "Maria Silva Atualizada",
@@ -64,4 +64,5 @@ curl -X PUT http://localhost:8080/users/11\
 
 🗑️ Deletar Usuário (DELETE)
 curl -X DELETE http://localhost:8080/users/1
+
 
