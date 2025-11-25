@@ -1,27 +1,25 @@
 🚀 Tecnologias Utilizadas
 
-Lumen (PHP) – API padrão do gateway
-FastAPI (Python)
-.NET WebAPI (C#)
-PostgreSQL
-NGINX (Gateway Reverso)
-Docker & Docker Compose
+• Lumen (PHP) – API padrão do gateway
+• FastAPI (Python)
+• .NET WebAPI (C#)
+• PostgreSQL
+• NGINX (Gateway Reverso)
+• Docker & Docker Compose
 
 🐳 Executando o projeto
 
-Todo o ambiente (gateway, banco e APIs) é iniciado através do Docker Compose.
+Todo o ambiente (gateway, banco e APIs) é iniciado através do Docker Compose (docker compose up --build).
 
 🔗 Rotas das APIs pelo Gateway
-⭐ API padrão (Lumen – PHP)
 
+⭐ API padrão (Lumen – PHP)
 http://localhost:8080/users
 
 🐍 API FastAPI (Python)
-
 http://localhost:8080/api_python/users
 
 🟦 API .NET WebAPI (C#)
-
 http://localhost:8080/api_csharp/users
 
 📌 Operações Disponíveis (CRUD)
