@@ -1,44 +1,47 @@
 🚀 Tecnologias Utilizadas
 
-- Lumen (PHP) – API padrão do gateway
-- FastAPI (Python)
-- .NET WebAPI (C#)
-- PostgreSQL
-- NGINX (Gateway Reverso)
-- Docker & Docker Compose
+Lumen (PHP) – API padrão do gateway
+FastAPI (Python)
+.NET WebAPI (C#)
+PostgreSQL
+NGINX (Gateway Reverso)
+Docker & Docker Compose
 
 🐳 Executando o projeto
 
 Todo o ambiente (gateway, banco e APIs) é iniciado através do Docker Compose.
 
 🔗 Rotas das APIs pelo Gateway
+⭐ API padrão (Lumen – PHP)
 
-*API padrão (Lumen – PHP)*
 http://localhost:8080/users
 
-*API FastAPI (Python)*
+🐍 API FastAPI (Python)
+
 http://localhost:8080/api_python/users
 
-*API .NET WebAPI (C#)*
+🟦 API .NET WebAPI (C#)
+
 http://localhost:8080/api_csharp/users
 
 📌 Operações Disponíveis (CRUD)
 
-*POST /users – Criar usuário
+POST /users – Criar usuário
 GET /users – Listar usuários
 GET /users/{id} – Buscar usuário por ID
 PUT /users/{id} – Atualizar usuário
-DELETE /users/{id} – Remover usuário*
+DELETE /users/{id} – Remover usuário
 
-*Para usar FastAPI ou .NET, basta adicionar o prefixo:*
+Para usar FastAPI ou .NET, basta adicionar o prefixo:
 • /api_python/users
 • /api_csharp/users
 
 📡 Exemplos de Requisições (curl)
 
-Os exemplos abaixo utilizam a API padrão (Lumen). Para testar nas outras APIs, basta adicionar o prefixo.
+Os exemplos abaixo utilizam a API padrão (Lumen).
+Para testar nas outras APIs, basta adicionar o prefixo correspondente.
 
-*Criar Usuário (POST)*
+🆕 Criar Usuário (POST)
 curl -X POST http://localhost:8080/users \
 -H "Content-Type: application/json" \
 -d '{
@@ -48,10 +51,10 @@ curl -X POST http://localhost:8080/users \
   "password": "123456"
 }'
 
-*Listar Usuários (GET)*
+📄 Listar Usuários (GET)
 curl http://localhost:8080/users
 
-*Atualizar Usuário (PUT)*
+✏️ Atualizar Usuário (PUT)
 curl -X PUT http://localhost:8080/users/11 \
 -H "Content-Type: application/json" \
 -d '{
@@ -61,5 +64,5 @@ curl -X PUT http://localhost:8080/users/11 \
   "password": "654321"
 }'
 
-*Deletar Usuário (DELETE)*
+🗑️ Deletar Usuário (DELETE)
 curl -X DELETE http://localhost:8080/users/11
