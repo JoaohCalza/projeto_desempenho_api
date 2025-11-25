@@ -1,43 +1,51 @@
-API Lumen (PHP) – padrão do gateway
-API Python (FastAPI)
-API C# (.NET WebAPI)
+🚀 Tecnologias Utilizadas
 
-Cada API possui CRUD completo e utiliza PostgreSQL.
-Todo o ambiente é executado via Docker Compose.
+Lumen (PHP) – API padrão do gateway
 
-Subir todos os serviços:
+FastAPI (Python)
 
-docker compose up --build
+.NET WebAPI (C#)
 
-A API padrão do gateway é a Lumen, acessada diretamente por:
+PostgreSQL 15
+
+NGINX (Gateway Reverso)
+
+Docker & Docker Compose
+
+🐳 Executando o projeto
+
+Todo o ambiente (gateway, banco e APIs) é iniciado através do Docker Compose.
+
+🔗 Rotas das APIs pelo Gateway
+API padrão (Lumen – PHP)
 
 http://localhost:8080/users
 
-Para acessar as outras APIs, basta colocar o prefixo antes de /users:
-
-API Python (FastAPI):
+API FastAPI (Python)
 
 http://localhost:8080/api_python/users
 
-API C# (.NET):
+API .NET WebAPI (C#)
 
 http://localhost:8080/api_csharp/users
 
-Operações Disponíveis (CRUD)
+📌 Operações Disponíveis (CRUD)
 
-POST /users
+POST /users – Criar usuário
 
-GET /users
+GET /users – Listar usuários
 
-GET /users/{id}
+GET /users/{id} – Buscar usuário por ID
 
-PUT /users/{id}
+PUT /users/{id} – Atualizar usuário
 
-DELETE /users/{id}
+DELETE /users/{id} – Remover usuário
 
-Exemplo: PUT /api_python/users/5
+Para usar FastAPI ou .NET, basta adicionar o prefixo:
+• /api_python/users
+• /api_csharp/users
 
-Exemplos de Requisições (curl)
+📡 Exemplos de Requisições (curl)
 
 Os exemplos abaixo utilizam a API padrão (Lumen).
 Para testar nas outras APIs, basta adicionar o prefixo.
