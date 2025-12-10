@@ -1,6 +1,6 @@
 🔬 Comparação de Desempenho de APIs com Gateway
 
-Este repositório contém um projeto acadêmico desenvolvido em conjunto com mais dois colegas, como trabalho de uma disciplina da graduação, cujo objetivo é comparar o desempenho de APIs REST implementadas em PHP (Lumen), Python (FastAPI) e C# (.NET WebAPI). As APIs são integradas por um gateway reverso com NGINX e executadas em ambiente Dockerizado.
+Este repositório contém um projeto acadêmico desenvolvido em conjunto com mais dois colegas, como trabalho de uma disciplina da graduação, cujo objetivo é comparar o desempenho de APIs REST, implementadas em **PHP (Lumen, microframework do Laravel)**, **Python (FastAPI)** e **C# (.NET WebAPI)**. As APIs são integradas por um gateway reverso com NGINX e executadas em ambiente Dockerizado.
 
 O projeto foi utilizado em testes de carga e estresse, permitindo a análise de métricas como tempo de resposta, throughput e taxa de erro.
 
@@ -71,3 +71,4 @@ Para testar nas demais APIs, adicione o prefixo desejado.
 
 🗑️ Deletar Usuário (DELETE)
 • curl -X DELETE http://localhost:8080/users/1
+
