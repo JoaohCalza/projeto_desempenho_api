@@ -1,3 +1,20 @@
+🔬 Comparação de Desempenho de APIs com Gateway
+
+Este repositório contém um projeto acadêmico desenvolvido em conjunto com mais dois colegas, como trabalho de uma disciplina da graduação, cujo objetivo é comparar o desempenho de APIs REST implementadas em PHP (Lumen), Python (FastAPI) e C# (.NET WebAPI). As APIs são integradas por um gateway reverso com NGINX e executadas em ambiente Dockerizado.
+O projeto foi utilizado em testes de carga e estresse, permitindo a análise de métricas como tempo de resposta, throughput e taxa de erro.
+
+📄 Artigo Técnico
+
+Este projeto é acompanhado por um artigo acadêmico que descreve:
+
+• Metodologia dos testes
+• Cenários de carga e estresse
+• Métricas coletadas (latência, throughput e erros)
+• Análise comparativa entre as tecnologias
+• Conclusões
+
+➡️ Artigo completo disponível na pasta docs/.
+
 🚀 Tecnologias Utilizadas
 
 • Lumen (PHP) – API padrão do gateway
@@ -7,62 +24,57 @@
 • NGINX (Gateway Reverso)
 • Docker & Docker Compose
 
-🐳 Executando o projeto
+🐳 Executando o Projeto
 
-Todo o ambiente (gateway, banco e APIs) é iniciado através do Docker Compose (docker compose up --build).
+Todo o ambiente (gateway, banco de dados e APIs) é iniciado através do Docker Compose.
+
+• docker compose up --build
 
 🔗 Rotas das APIs pelo Gateway
 
-⭐ API padrão (Lumen – PHP)
-http://localhost:8080/users
+⭐ API padrão — Lumen (PHP)
+• http://localhost:8080/users
 
-🐍 API FastAPI (Python)
-http://localhost:8080/api_python/users
+🐍 FastAPI (Python)
+• http://localhost:8080/api_python/users
 
-🟦 API .NET WebAPI (C#)
-http://localhost:8080/api_csharp/users
+🟦 .NET WebAPI (C#)
+• http://localhost:8080/api_csharp/users
 
 📌 Operações Disponíveis (CRUD)
 
-POST /users – Criar usuário
-GET /users – Listar usuários
-GET /users/{id} – Buscar usuário por ID
-PUT /users/{id} – Atualizar usuário
-DELETE /users/{id} – Remover usuário
+• POST /users – Criar usuário
+• GET /users – Listar usuários
+• GET /users/{id} – Buscar usuário por ID
+• PUT /users/{id} – Atualizar usuário
+• DELETE /users/{id} – Remover usuário
 
-Para usar FastAPI ou .NET, basta adicionar o prefixo:
+Para utilizar FastAPI ou .NET, basta adicionar o prefixo correspondente:
+
 • /api_python/users
 • /api_csharp/users
 
 📡 Exemplos de Requisições (curl)
 
-Os exemplos abaixo utilizam a API padrão (Lumen).
-Para testar nas outras APIs, basta adicionar o prefixo correspondente.
+Os exemplos abaixo utilizam a API padrão (Lumen – PHP).
+Para testar nas demais APIs, adicione o prefixo desejado.
 
 🆕 Criar Usuário (POST)
-curl -X POST http://localhost:8080/users \
--H "Content-Type: application/json" \
--d '{
-  "name": "João Henrique",
-  "email": "joao@email.com",
-  "user": "joaologin",
-  "password": "123456"
-}'
+• curl -X POST http://localhost:8080/users
+
+• -H "Content-Type: application/json"
+• -d '{ "name": "João Henrique", "email": "joao@email.com
+", "user": "joaologin", "password": "123456" }'
 
 📄 Listar Usuários (GET)
-curl http://localhost:8080/users
+• curl http://localhost:8080/users
 
 ✏️ Atualizar Usuário (PUT)
-curl -X PUT http://localhost:8080/users/1 \
--H "Content-Type: application/json" \
--d '{
-  "name": "Maria Silva Atualizada",
-  "email": "maria_atualizada@email.com",
-  "user": "marialogin",
-  "password": "654321"
-}'
+• curl -X PUT http://localhost:8080/users/1
+
+• -H "Content-Type: application/json"
+• -d '{ "name": "Maria Silva Atualizada", "email": "maria_atualizada@email.com
+", "user": "marialogin", "password": "654321" }'
 
 🗑️ Deletar Usuário (DELETE)
-curl -X DELETE http://localhost:8080/users/1
-
-
+• curl -X DELETE http://localhost:8080/users/1
